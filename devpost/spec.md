@@ -54,6 +54,8 @@ No API key is needed.
 
 **Deployed (learner's choice): Streamlit Community Cloud.** Connect the public GitHub repo, set the main file to `app.py`, and pick Python 3.12 or 3.13 in the advanced settings. Cloud installs from `requirements.txt`. It's free and needs a Streamlit account linked to GitHub. Docs: https://docs.streamlit.io/deploy/streamlit-community-cloud. **Deployment must never block submission.** If it fails, ship with local + video. Done at `6-ship`.
 
+**Public repository:** https://github.com/roanenicki/cdr-explainer (public, default branch `main`).
+
 **Demo recording:** start locally (or use the live link) → "Try a file with errors" (94.9%, orange, 15/8/6/12/10) → filter the table by one check → "Try a clean file" (100% green) → one real upload.
 
 ## Look and Feel
