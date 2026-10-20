@@ -1,5 +1,8 @@
 # CDR Explainer
 
+<!-- SHIP: add a screenshot of the report here, e.g. ![CDR Explainer report](docs/screenshot.png) -->
+<!-- SHIP: add the demo video link here, e.g. **Demo video:** https://... -->
+
 Upload a file of voice call detail records (CDRs) and see in seconds whether it's safe to send downstream, what's wrong with it, and why it matters for billing.
 
 Telecom testers still check by hand whether a received CDR file is complete and consistent. It's slow, and errors are easy to miss. CDR Explainer already knows what a CDR is: it runs telecom-specific checks out of the box and explains each failure as its billing impact, topped by a colored health verdict.
@@ -20,7 +23,7 @@ Five deterministic checks, in plain Python (no AI): the same file always gives t
 
 A row counts once in the health score, however many checks it fails. To avoid counting one root problem twice, time checks skip rows with malformed times, the duration check skips end-before-start rows, and the phone check skips empty numbers.
 
-**Health score** = valid rows / total rows. ≥ 99% green, 90–99% orange, < 90% red.
+**Health score** = valid rows / total rows. 99% or more: green; 90% to under 99%: orange; under 90%: red.
 
 ## Input format
 
@@ -39,6 +42,8 @@ A comma-separated file with a header row. Column names are matched ignoring case
 
 UTF-8 and Latin-1 files are accepted. Unusable files get a clear message instead of a report.
 
+**Result:** Sample file → 94.9% valid, 51 rows flagged, each with its billing impact.
+
 ## Run it locally
 
 Requires Python 3.12 or 3.13. No API key needed.
@@ -51,6 +56,12 @@ streamlit run app.py              # opens http://localhost:8501
 ```
 
 Click **Try a file with errors** or **Try a clean file**, or upload your own CSV.
+
+## Limitations
+
+- Built-in, simplified voice CDR schema only (no data or SMS CDRs, no per-flow specification).
+- `call_type` and `cell_id` are shown but not checked.
+- Files are processed in memory; Streamlit's upload limit is 200 MB.
 
 ## Tests
 

@@ -43,11 +43,16 @@ Build mode: learn
 
 - [x] Early usable behavior explored — after slice 1: the numbers, the wording and the filter/rerun behavior, while the look is still open to change in slice 2
   Feedback: all three learner checks passed. Requested: reset the table filter to "All checks" when a new file loads; show a perfect score as "100%" (others keep one decimal). Both done and verified before the slice 1 commit.
-- [ ] Final kick-the-tires exploration and feedback completed
+- [x] Final kick-the-tires exploration and feedback completed
+  Learner ran the full final checklist (first look, both samples, switching files, uploads and error states, layout, pytest 45 passed, README): everything works.
 
 ## Final Review
 
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+- [x] README: threshold wording "99% or more: green; 90% to under 99%: orange; under 90%: red"
+- [x] README: "Result" line above "Run it locally"
+- [x] README: "Limitations" section (simplified voice schema, call_type/cell_id unchecked, in-memory with 200 MB upload limit)
+- [x] README: placeholders (HTML comments) at the top for the screenshot and demo video link, to fill at `6-ship`
+- [x] Final review complete — feedback resolved and learner confirms ready to ship
 
 ## Code Tour and App Map
 
