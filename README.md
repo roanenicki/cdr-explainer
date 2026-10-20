@@ -1,7 +1,8 @@
 # CDR Explainer
 
-<!-- SHIP: add a screenshot of the report here, e.g. ![CDR Explainer report](docs/screenshot.png) -->
-<!-- SHIP: add the demo video link here, e.g. **Demo video:** https://... -->
+![CDR Explainer verdict banner for the sample file with errors: 94.9% valid rows, review before sending](docs/verdict-banner.png)
+
+**Demo video:** https://youtu.be/GQutq5GIEQM  
 **Live app:** https://cdr-explainer.streamlit.app
 
 Upload a file of voice call detail records (CDRs) and see in seconds whether it's safe to send downstream, what's wrong with it, and why it matters for billing.
