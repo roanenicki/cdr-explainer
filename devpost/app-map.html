@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CDR Explainer App Map</title>
+<style>
+  :root {
+    --bg: #FFFFFF; --panel: #F6F8FA; --text: #1F2937; --muted: #4B5563; --border: #E5E7EB;
+    --accent: #1E40AF; --orange: #B45309; --orange-bg: #FFF7ED; --green: #15803D; --green-bg: #ECFDF3;
+    --code-bg: #EEF2F7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1419; --panel: #161D26; --text: #E5E7EB; --muted: #A7B0BC; --border: #2B3542;
+      --accent: #93B4FF; --orange: #F5A55A; --orange-bg: #2A1E12; --green: #6BD49A; --green-bg: #12261B;
+      --code-bg: #1E2733;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 40px 16px 64px; }
+  h1 { color: var(--accent); font-size: 2rem; margin: 0 0 .25rem; }
+  h2 { font-size: 1.3rem; margin: 2.2rem 0 .6rem; padding-top: .4rem; border-top: 1px solid var(--border); }
+  h3 { font-size: 1.05rem; margin: 1.2rem 0 .3rem; }
+  p, li { color: var(--text); }
+  .lede { color: var(--muted); font-size: 1.05rem; margin-top: 0; }
+  .note { color: var(--muted); font-size: .92rem; }
+  code { background: var(--code-bg); padding: .08em .35em; border-radius: 4px; font-size: .9em;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace; }
+  pre { background: var(--code-bg); padding: .8rem 1rem; border-radius: 8px; overflow-x: auto; font-size: .88rem; }
+  pre code { background: none; padding: 0; }
+  .pieces { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 0; list-style: none; }
+  .pieces li { border: 1px solid var(--border); border-radius: 8px; padding: .8rem 1rem; background: var(--panel); }
+  .pieces strong { display: block; margin-bottom: .2rem; }
+  figure { margin: 1rem 0; }
+  svg { width: 100%; height: auto; display: block; }
+  svg .box { fill: var(--panel); stroke: var(--border); stroke-width: 1.5; }
+  svg .box-ui { fill: var(--orange-bg); stroke: var(--orange); stroke-width: 1.5; }
+  svg .box-test { fill: var(--green-bg); stroke: var(--green); stroke-width: 1.5; }
+  svg .t { fill: var(--text); font: 600 13px system-ui, sans-serif; }
+  svg .s { fill: var(--muted); font: 12px ui-monospace, Consolas, monospace; }
+  svg .arrow { stroke: var(--muted); stroke-width: 1.6; fill: none; marker-end: url(#head); }
+  svg .dash { stroke: var(--green); stroke-width: 1.6; fill: none; stroke-dasharray: 5 4; marker-end: url(#headg); }
+  svg #head path { fill: var(--muted); } svg #headg path { fill: var(--green); }
+  figcaption { color: var(--muted); font-size: .9rem; margin-top: .4rem; }
+  ol.route > li { margin-bottom: 1rem; }
+  details { border: 1px solid var(--border); border-radius: 8px; padding: .5rem .9rem; margin: .5rem 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+  th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .practice { background: var(--panel); border-left: 4px solid var(--accent); border-radius: 6px; padding: .8rem 1.1rem; }
+  .table-wrap { overflow-x: auto; }
+  @media (max-width: 560px) { .pieces { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+
+<h1>CDR Explainer: App Map</h1>
+<p class="lede">A take-home guide to how the code fits together: what the main pieces are, what happens when you click a button, and where to start when you want to change something.</p>
+
+<h2>The app in one paragraph</h2>
+<p>You give it a CSV of voice call detail records (an upload, or one of the two sample buttons). It runs 5 deterministic telecom checks, works out the share of valid rows, and shows a colored verdict, metric cards, one card per check with its billing impact, and a filterable table of the rows that failed. Nothing is saved anywhere and no AI or API key is involved.</p>
+
+<h3>The main pieces</h3>
+<ul class="pieces">
+  <li><strong>The page: <code>app.py</code></strong>The only Streamlit file. It takes the file in, remembers it in <code>st.session_state</code>, and draws the report.</li>
+  <li><strong>The engine: <code>cdr_explainer/</code></strong>Plain Python with no Streamlit. Reads the file, runs the checks, builds the report. That's why pytest can test it directly.</li>
+  <li><strong>The wording and look: <code>explain.py</code>, <code>ui_html.py</code></strong>Every sentence a user reads, and the HTML for the banner and cards.</li>
+  <li><strong>The proof: <code>data/</code> + <code>tests/</code></strong>Synthetic sample files with planted errors, their expected counts, and the tests that compare the two.</li>
+</ul>
+
+<h2>One click, followed through the code</h2>
+<p>What happens when you click <strong>"Try a file with errors"</strong>:</p>
+<figure>
+<svg viewBox="0 0 820 400" role="img" aria-labelledby="flow-title flow-desc">
+  <title id="flow-title">Flow of a click on "Try a file with errors"</title>
+  <desc id="flow-desc">The button callback in app.py stores the file in session_state. Streamlit reruns app.py, which calls analyze in report.py. analyze calls load_cdrs, run_all and build_report. The report goes to verdict_text and verdict_banner, which produce the orange banner on screen. Separately, tests/test_samples.py calls analyze on the same file and compares the result with data/expected_counts.json.</desc>
+  <defs>
+    <marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="headg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+
+  <!-- Row 1: the page -->
+  <rect class="box-ui" x="10" y="20" width="180" height="62" rx="8"/>
+  <text class="t" x="24" y="46">You click the button</text>
+  <text class="s" x="24" y="66">"Try a file with errors"</text>
+
+  <rect class="box" x="230" y="20" width="250" height="62" rx="8"/>
+  <text class="t" x="244" y="46">1. app.py</text>
+  <text class="s" x="244" y="66">load_sample → set_source</text>
+
+  <rect class="box" x="520" y="20" width="290" height="62" rx="8"/>
+  <text class="t" x="534" y="46">st.session_state["source"]</text>
+  <text class="s" x="534" y="66">file kept across reruns</text>
+
+  <path class="arrow" d="M190 51 H226"/>
+  <path class="arrow" d="M480 51 H516"/>
+
+  <!-- Rerun down to engine -->
+  <path class="arrow" d="M665 82 V118 H355 V146"/>
+  <text class="s" x="370" y="138">Streamlit reruns app.py top to bottom</text>
+
+  <!-- Row 2: the engine -->
+  <rect class="box" x="230" y="150" width="250" height="62" rx="8"/>
+  <text class="t" x="244" y="176">2. report.py → analyze()</text>
+  <text class="s" x="244" y="196">the engine's front door</text>
+
+  <rect class="box" x="520" y="150" width="290" height="62" rx="8"/>
+  <text class="t" x="534" y="172">load_cdrs → run_all</text>
+  <text class="s" x="534" y="190">loader.py, checks.py</text>
+  <text class="s" x="534" y="205">→ build_report (report.py)</text>
+
+  <path class="arrow" d="M480 172 H516"/>
+  <path class="arrow" d="M520 192 H484"/>
+
+  <!-- Row 3: wording and look -->
+  <rect class="box" x="230" y="280" width="250" height="62" rx="8"/>
+  <text class="t" x="244" y="306">3. explain.py + ui_html.py</text>
+  <text class="s" x="244" y="326">verdict_text → verdict_banner</text>
+
+  <rect class="box-ui" x="520" y="280" width="290" height="62" rx="8"/>
+  <text class="t" x="534" y="306">On screen: orange banner</text>
+  <text class="s" x="534" y="326">94.9% · 51 rows have issues</text>
+
+  <path class="arrow" d="M355 212 V276"/>
+  <path class="arrow" d="M480 311 H516"/>
+
+  <!-- Tests -->
+  <rect class="box-test" x="10" y="150" width="180" height="62" rx="8"/>
+  <text class="t" x="24" y="174">tests/test_samples.py</text>
+  <text class="s" x="24" y="194">same analyze()</text>
+  <path class="dash" d="M190 181 H226"/>
+
+  <rect class="box-test" x="10" y="280" width="180" height="62" rx="8"/>
+  <text class="t" x="24" y="304">data/</text>
+  <text class="s" x="24" y="324">expected_counts.json</text>
+  <path class="dash" d="M100 280 V216"/>
+  <text class="s" x="10" y="380">Dashed green: how the tests prove the same path the click takes.</text>
+</svg>
+<figcaption>The click and the tests go through the same <code>analyze()</code>. The tests just skip the browser.</figcaption>
+</figure>
+
+<h2>Reference route: 3 stops</h2>
+<p class="note">A reference route to follow when you want to: it wasn't toured live during the build wrap-up. Search for the anchor in your editor (Ctrl+Shift+F in VS Code). Line numbers drift, names don't.</p>
+<ol class="route">
+  <li>
+    <strong><code>app.py</code>: search <code>def load_sample</code> and <code>def set_source</code></strong><br>
+    The button's <code>on_click</code> callback stores the file's bytes in <code>st.session_state["source"]</code> and resets the filter. Streamlit then reruns the whole file. Near the bottom, <code>analyze(source["data"])</code> runs and <code>draw_report</code> draws the result. A button is only "clicked" for one rerun, which is why the file lives in <code>session_state</code> and not in the button.
+    <details>
+      <summary>Show the code</summary>
+<pre><code>def set_source(name: str, data: bytes) -&gt; None:
+    """The most recent upload or sample click wins; a new file starts unfiltered."""
+    st.session_state["source"] = {"name": name, "data": data}
+    st.session_state[FILTER_KEY] = ALL_CHECKS
+
+
+def load_sample(filename: str) -&gt; None:
+    set_source(filename, (DATA / filename).read_bytes())
+    st.session_state[UPLOAD_VERSION] = st.session_state.get(UPLOAD_VERSION, 0) + 1</code></pre>
+    </details>
+  </li>
+  <li>
+    <strong><code>cdr_explainer/report.py</code>: search <code>def analyze</code></strong><br>
+    The engine's front door, in two lines. <code>load_cdrs</code> (<code>loader.py</code>) turns bytes into a table of text, or raises a <code>FileProblem</code> with the message the user sees. <code>run_all</code> (<code>checks.py</code>) runs the 5 checks with their skip rules. <code>build_report</code> computes the score, the status (99 / 90 thresholds) and the anomaly table.
+    <details>
+      <summary>Show the code</summary>
+<pre><code>def analyze(data: bytes) -&gt; Report:
+    """The only function the page needs: file bytes in, report out."""
+    df = load_cdrs(data)
+    return build_report(df, run_all(df))</code></pre>
+    </details>
+  </li>
+  <li>
+    <strong><code>cdr_explainer/explain.py</code>: search <code>def verdict_text</code>; then <code>cdr_explainer/ui_html.py</code>: search <code>def verdict_banner</code></strong><br>
+    <code>verdict_text</code> writes "Review before sending: 51 rows have issues." and <code>main_issues</code> writes the "Main issues" line. <code>verdict_banner</code> wraps them in the orange HTML banner, escaping all text. Wording and look are kept apart, so you can change one without touching the other.
+  </li>
+</ol>
+
+<h2>To change this, start here</h2>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>You want to change…</th><th>Start here</th></tr></thead>
+  <tbody>
+    <tr><td>Any sentence a user reads (check names, impacts, verdicts)</td><td><code>cdr_explainer/explain.py</code>: <code>CHECK_NAMES</code>, <code>CHECK_IMPACTS</code>, <code>verdict_text</code></td></tr>
+    <tr><td>The green / orange / red thresholds</td><td><code>cdr_explainer/report.py</code>: <code>GREEN_MIN</code>, <code>ORANGE_MIN</code></td></tr>
+    <tr><td>Colors, card layout, spacing</td><td><code>cdr_explainer/ui_html.py</code>: <code>STATUS_COLORS</code>, <code>STYLE</code>. Theme: <code>.streamlit/config.toml</code></td></tr>
+    <tr><td>Column names, time format, phone rule, duration tolerance</td><td><code>cdr_explainer/schema.py</code></td></tr>
+    <tr><td>How a check decides, or a new check</td><td><code>cdr_explainer/checks.py</code>: <code>run_all</code> and <code>CHECK_IDS</code>. Then add its name and impact in <code>explain.py</code>, and plant examples in <code>samples.py</code> (<code>PLANTED</code>)</td></tr>
+    <tr><td>Messages for unusable files</td><td><code>cdr_explainer/loader.py</code>: <code>CANT_READ</code>, <code>NO_RECORDS</code>, <code>FileProblem.markdown</code></td></tr>
+    <tr><td>The sample files</td><td><code>cdr_explainer/samples.py</code>, then run <code>python scripts/generate_samples.py</code> and commit <code>data/</code> (the drift test checks they match)</td></tr>
+    <tr><td>What appears on the page, and in what order</td><td><code>app.py</code>: the bottom of the file and <code>draw_report</code></td></tr>
+  </tbody>
+</table>
+</div>
+<p class="note">A change in the engine? Run <code>pytest</code>: 45 tests say whether the planted errors are still found exactly.</p>
+
+<h2>A practice to reuse</h2>
+<div class="practice">
+  <p><strong>Write the expected result into the plan, then make a test say it.</strong></p>
+  <p>The PRD (<code>devpost/prd.md</code> → <em>Health Score and Verdict</em>) set an observable acceptance line before any code existed: <em>"The dirty sample shows 94.9%, orange, 'Review before sending: 51 rows have issues.'"</em> The generator plants exactly those errors and checks that each one trips only its intended check (<code>samples.py</code> → <code>_assert_planted</code>). <code>tests/test_samples.py</code> → <code>test_dirty_sample_headline</code> asserts that exact sentence. Keeping the engine free of Streamlit is what made that test possible without a browser.</p>
+  <p>On another project (with Kiro or anywhere else): for each requirement, write the result someone could observe, keep the logic that produces it separate from the UI, and turn the observation into a test. A requirement that has a test becomes a check you can rerun at any time.</p>
+</div>
+
+<h2>Run it again</h2>
+<pre><code>.venv\Scripts\activate
+streamlit run app.py      # http://localhost:8501
+pytest                    # 45 tests</code></pre>
+<p class="note">Snapshot of commit <code>c74e9f5</code> (end of the build). The code may change later, and this map won't update itself. If a name here no longer exists, search for the closest one.</p>
+
+</main>
+</body>
+</html>

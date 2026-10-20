@@ -56,15 +56,15 @@ Build mode: learn
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] Learning activity complete — guided route, focused alternative, prior practice connected, or brief recap
+- [x] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence:
-Route and stops:
-Edit outcome:
-Reflection:
-Activity mode:
+Activity and evidence: brief recap. A guided route (button callback → `analyze` → `verdict_text`/`verdict_banner`, matched to the PRD acceptance line and `test_dirty_sample_headline`) was offered; the learner chose to skip the walkthrough for now and use the app map instead. Not recorded as hands-on practice.
+Route and stops: reference route only, not toured: `app.py` `load_sample`/`set_source`; `cdr_explainer/report.py` `analyze`; `cdr_explainer/explain.py` `verdict_text` + `cdr_explainer/ui_html.py` `verdict_banner`. All anchors checked against source at commit c74e9f5.
+Edit outcome: declined (optional tagline edit skipped); no code changed.
+Reflection: transfer question offered with the map, optional.
+Activity mode: recap + app map (`devpost/app-map.html`), checked in a browser via a local server.
 
 ## Revisions
 - Banner, cards and header render with `st.html` instead of `st.markdown(unsafe_allow_html=True)`, and the card icons are SVG `<img>` data URIs — Streamlit 1.51's HTML sanitizer strips inline `<svg>` tags, found when checking the page in a real browser.
