@@ -56,6 +56,8 @@ No API key is needed.
 
 **Public repository:** https://github.com/roanenicki/cdr-explainer (public, default branch `main`).
 
+**Live app:** https://cdr-explainer.streamlit.app (Streamlit Community Cloud, Python 3.13, from `main`).
+
 **Demo recording:** start locally (or use the live link) → "Try a file with errors" (94.9%, orange, 15/8/6/12/10) → filter the table by one check → "Try a clean file" (100% green) → one real upload.
 
 ## Look and Feel
