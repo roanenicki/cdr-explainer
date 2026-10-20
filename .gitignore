@@ -5,3 +5,9 @@
 .venv/
 __pycache__/
 .pytest_cache/
+
+# Hackathon skill tooling (not part of the app)
+.agents/
+.claude/
+agent/
+skills-lock.json
