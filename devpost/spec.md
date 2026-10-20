@@ -119,7 +119,8 @@ PRD ref: `prd.md > Screens and Layout`, `prd.md > Look and Feel`, `prd.md > Chec
 
 ### Page (`app.py`)
 - `st.set_page_config(page_title="CDR Explainer", layout=...)`, then the header.
-- The uploader (`type=["csv"]`, `on_change` callback) and two buttons (`on_click` callbacks) all write `st.session_state["source"]`. The most recent action wins.
+- The uploader (`type=["csv"]`, `on_change` callback) and two buttons (`on_click` callbacks) all write `st.session_state["source"]`. The most recent action wins. The uploader's key includes `st.session_state["upload_version"]`, which a sample click bumps, so the uploader comes back empty.
+- `FileProblem.is_warning` (empty or headers only) → `st.warning`; otherwise `st.error`. `FileProblem.markdown()` formats missing columns in code style with a bulleted expected-column list.
 - If a source is present: the current file name is shown in small grey, then `try: report = analyze(...)`, and on `except FileProblem` the error is shown (plus the expected-column list).
 - It draws the banner (`st.markdown(..., unsafe_allow_html=True)`), 3 `st.metric` columns and the cards, then `st.selectbox("Show", ["All checks", *check names])` and `st.dataframe(filtered, hide_index=True)`.
 PRD ref: `prd.md > The Core Journey`, `prd.md > Screens and Layout`.

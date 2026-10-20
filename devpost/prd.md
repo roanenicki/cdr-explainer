@@ -130,7 +130,9 @@ Acceptance:
 - **Unusable file:** a clear message instead of the report, never a crash or a Python traceback:
   - Not a CSV or unreadable → "This file can't be read as a CSV. Please upload a comma-separated file."
   - Empty or headers only → "This file has no call records to check."
-  - Missing required columns → "This file is missing required columns: [list]." followed by the full list of expected columns.
+  - Missing required columns → "This file is missing required columns: [list]." followed by the full list of expected columns. Column names are shown in code style, and the expected columns as a short bulleted list (required, then optional).
+  - Empty or headers-only files aren't failures, so their message is a warning (amber). Unreadable files and missing columns are errors (red).
+- **One active file:** clicking a sample button clears the upload control, so it never shows a file other than the one being reported on.
 - **Persistence:** none. Nothing is saved between sessions.
 - **No API key needed:** all wording comes from templates.
 
@@ -159,6 +161,7 @@ Acceptance:
 - **Gemini AI summary:** stretch goal, only if the core, samples and tests are done by **2026-10-23**. Otherwise it goes in the README under "Next steps." Optional, with templates as the fallback.
 
 ## Possible Later Enhancements
+- **Configurable schema:** load each data flow's spec (fields, formats, rules) from a file, so the tool adapts to any mediation flow. The PoC uses a built-in simplified voice CDR schema, and the README says so.
 - More telecom checks (e.g. data/SMS CDRs, cell_id validation, call_type rules).
 - Export/download the report.
 - Handling very large files (millions of rows) efficiently.

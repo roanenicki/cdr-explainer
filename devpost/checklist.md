@@ -29,7 +29,7 @@ Build mode: learn
   Learner check: Open the app, click both sample buttons and look at the page as if you were a judge seeing it for 5 seconds. Is the verdict readable at a glance? Do the cards feel calm and professional? Try narrowing the browser window: the cards should wrap.
   Commit: `Style the report: verdict banner, check cards and theme`
 
-- [ ] **3. Upload your own file, and bad files get a clear message**
+- [x] **3. Upload your own file, and bad files get a clear message**
   Becomes usable: Uploading a CSV replaces the current report (the most recent action wins). Unusable files show a clear message instead of a traceback: not a CSV, empty or headers only, or missing required columns (with the full expected-column list). Mixed-case or spaced headers and extra columns are accepted. A Latin-1 export still loads.
   Why now: The core journey already works end to end on the samples. This completes the "real upload" step of the journey and the error states, which depend on the loader already being in place.
   PRD ref: `prd.md > The Core Journey` (step 2), `prd.md > Input File Format`, `prd.md > States and Boundaries`
@@ -66,3 +66,6 @@ Activity mode:
 - Layout is `wide` capped at 1100px, with the 5 check cards on one row (2 columns under 900px, 1 under 560px) — the centered layout and auto-fit grid wrapped the cards 4+1.
 - The anomaly table shows `row_number`, `checks_failed` and `details` first — with the original column order, the columns that say what's wrong were off-screen to the right.
 - Slice 2 learner review added: hidden Streamlit toolbar, a "Main issues" line in the banner, 3 + 2 equal-height check cards with the breakdown pinned to the bottom, darker/larger secondary text, status-colored "Rows with errors", and a green message instead of an empty table for clean files — PRD (Look and Feel, Health Score and Verdict, Check Cards, Anomaly Table) and spec (Look and Feel) updated to match. Metric cards became custom HTML because `st.metric` can't color its value. A CSV download button was considered and declined: `st.dataframe`'s built-in download icon already exports the filtered rows, so export stays under Later.
+- The loader also treats as "can't be read as a CSV": files containing NUL bytes (binary), single-column files whose header contains `;`, tab or `|`, and rows with more cells than the header (pandas otherwise silently shifted them into an index). Rows with fewer cells get "" for the missing cells, so they count as missing fields. Duplicate header names after normalizing keep the first — found while writing `test_loader.py`.
+- README states the built-in simplified voice CDR schema, and lists "Configurable schema" first under Next steps (learner request); PRD's Possible Later Enhancements updated to match.
+- Slice 3 learner review: a sample click now clears the uploader (versioned widget key) so only one file is ever active; empty/headers-only files show an amber warning instead of a red error; the missing-columns message uses code-style names and a bulleted expected-column list — PRD (States and Boundaries) and spec (Page) updated.
