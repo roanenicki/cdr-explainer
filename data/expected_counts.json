@@ -1,0 +1,30 @@
+{
+  "sample_dirty.csv": {
+    "total": 1000,
+    "valid": 949,
+    "error_rows": 51,
+    "score_pct": 94.9,
+    "status": "orange",
+    "checks": {
+      "missing_or_malformed": 15,
+      "duplicates": 8,
+      "end_before_start": 6,
+      "invalid_duration": 12,
+      "invalid_phone": 10
+    }
+  },
+  "sample_clean.csv": {
+    "total": 1000,
+    "valid": 1000,
+    "error_rows": 0,
+    "score_pct": 100.0,
+    "status": "green",
+    "checks": {
+      "missing_or_malformed": 0,
+      "duplicates": 0,
+      "end_before_start": 0,
+      "invalid_duration": 0,
+      "invalid_phone": 0
+    }
+  }
+}
