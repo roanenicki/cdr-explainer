@@ -35,7 +35,7 @@ Source: `scope.md > Inspiration & Identity`.
 - **The verdict is the hero:** a big score number and verdict text in a colored banner, readable from across the room.
 - **Check cards:** a simple grid. Each card has an icon, the check name, the failed-row count and the impact sentence. Passed checks show a green check mark and "0 issues."
 - **Type:** a clean sans-serif (Streamlit's default is fine). Numbers large and bold, explanations small and grey.
-- **Avoid:** emojis (except simple status icons), chatbot styling, AI sparkles.
+- **Avoid:** emojis (except simple status icons), chatbot styling, AI sparkles, and Streamlit's own "Deploy" button and menu (it should look like a real tool, not a Streamlit demo).
 
 ## Features and Behavior
 
@@ -87,7 +87,8 @@ Acceptance:
 - **Orange**, 90% to < 99%: "Review before sending: X rows have issues."
 - **Red**, < 90%: "Do not send downstream: send the file back to the source." Includes the real problem-row count.
 - The verdict text always includes the real number of problem rows (except "No issues found," where that number is 0).
-- Metric cards: total rows, valid rows, rows with errors.
+- Below the verdict, a **"Main issues"** line names the top 2 failing checks by row count (ties in card order), e.g. "Main issues: 15 missing or malformed fields · 12 invalid durations". Hidden for a 100% clean file.
+- Metric cards: total rows, valid rows, rows with errors. The "Rows with errors" number takes the status color when it's above 0.
 
 Acceptance:
 - [ ] The dirty sample shows **94.9%**, orange, "Review before sending: 51 rows have issues."
@@ -95,6 +96,7 @@ Acceptance:
 
 ### Check Cards
 - Grid of 5 cards, always in the order above. Each card shows an icon, the name, the failed-row count and the impact sentence.
+- On desktop the cards sit 3 + 2 with the bottom row filling the width. All cards have the same height and internal layout, so counts and sentences line up; the duration breakdown sits at the bottom of its card.
 - A passed check shows a green check mark and "0 issues." A failed check uses status color.
 
 Acceptance:
@@ -103,7 +105,9 @@ Acceptance:
 
 ### Anomaly Table
 - Lists every failing row: the original columns (including the optional ones), the check(s) failed, and a short detail (for example the original `record_id` for a duplicate, or "mismatch" vs. "negative/zero" for duration).
-- A filter by check type. The default shows all anomalies.
+- A filter by check type. The default shows all anomalies, and loading a new file resets the filter to "All checks."
+- The columns that say what's wrong (row number, check(s) failed, detail) come first.
+- A clean file shows "No anomalous rows: ready to send downstream." in green instead of an empty table.
 
 Acceptance:
 - [ ] Filtering by a check shows exactly that check's count of rows.

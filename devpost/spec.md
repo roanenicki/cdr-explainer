@@ -59,12 +59,15 @@ No API key is needed.
 ## Look and Feel
 From `prd.md > Look and Feel` (Stripe-like, sober, light, status colors only for status).
 
-- **Theme** (`.streamlit/config.toml`): `base="light"`, `primaryColor="#1E40AF"` (deep blue: buttons, focus), `backgroundColor="#FFFFFF"`, `secondaryBackgroundColor="#F6F8FA"`, `textColor="#1F2937"`. Default sans-serif font.
+- **Theme** (`.streamlit/config.toml`): `client.toolbarMode="minimal"` (hides Deploy and the menu), `base="light"`, `primaryColor="#1E40AF"` (deep blue: buttons, focus), `backgroundColor="#FFFFFF"`, `secondaryBackgroundColor="#F6F8FA"`, `textColor="#1F2937"`. Default sans-serif font.
 - **Status palette (used only in the banner and check cards):** green `#15803D` on `#ECFDF3`, orange `#B45309` on `#FFF7ED`, red `#B91C1C` on `#FEF2F2`. Neutral border `#E5E7EB`, secondary text `#6B7280`.
 - **Title:** "CDR Explainer" in the accent blue, with one grey explanatory line below.
 - **Verdict banner:** full width, status background, a thin left border in the status color, the score number at about 56px bold and the verdict text at about 20px semibold.
-- **Check cards:** a CSS grid with 5 cards (it wraps on narrow screens), white with a neutral border and 8px radius. Each card has a status icon (a simple inline-SVG check, warning or cross, no emoji), the check name, a large bold count ("0 issues" in green when passed) and the impact sentence in small grey. The Invalid duration card adds a "negative/zero: N · mismatch: M" line.
-- Generous white space, and `layout="centered"` or a max-width wide layout, whichever reads best in the video (decided in the build).
+- **Verdict banner extra line:** "Main issues: …" (top 2 checks by count, from `explain.main_issues`), hidden when clean.
+- **Metric cards:** custom HTML (`ui_html.metric_cards`), because `st.metric` can't color its value. "Rows with errors" takes the status color when above 0.
+- **Check cards:** a 6-column CSS grid laid out 3 + 2 (top cards span 2, bottom cards span 3), equal heights (`grid-auto-rows: 1fr`); 2 columns under 900px with the 5th card full width, 1 column under 560px. White with a neutral border and 8px radius. Each card has a status icon (an SVG check, warning or cross as an `<img>` data URI, no emoji), the one-line check name, a large bold count ("0 issues" in green when passed) and the impact sentence in dark grey (`#4B5563`). The Invalid duration card adds a "negative/zero: N · mismatch: M" line pinned to the card's bottom.
+- **Clean table state:** "No anomalous rows: ready to send downstream." in a green box instead of the filter and table.
+- Generous white space, `layout="wide"` capped at 1100px (decided in the build).
 - **Copy tone:** plain, factual, operator language. No exclamation marks, no AI wording.
 
 ## Components

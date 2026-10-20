@@ -19,7 +19,7 @@ Build mode: learn
   Learner check: Run `streamlit run app.py`, click "Try a file with errors" and compare the numbers to the planted errors (51 rows, 15/8/6/12/10). Change the table filter to "Duplicate records": you should see 8 rows, each naming its original `record_id`, and the report should stay on screen. Then click "Try a clean file": 100%, "No issues found."
   Commit: `Analyze sample CDR files with the 5 checks and show the report`
 
-- [ ] **2. The report looks like a real operator tool**
+- [x] **2. The report looks like a real operator tool**
   Becomes usable: The same report, now in the Stripe-like look: deep-blue title, the big colored verdict banner, metric cards, a grid of 5 check cards with check/warning/cross icons, "0 issues" in green for passed checks, and the "negative/zero: N · mismatch: M" line on the Invalid duration card.
   Why now: The numbers are proven, so styling can't hide a wrong count. The look is what judges see first in a 2-minute video, and it's the learner's second learning goal (a polished Streamlit interface), so it comes before the less visible upload edge cases.
   PRD ref: `prd.md > Screens and Layout`, `prd.md > Look and Feel`, `prd.md > Check Cards`
@@ -62,3 +62,7 @@ Reflection:
 Activity mode:
 
 ## Revisions
+- Banner, cards and header render with `st.html` instead of `st.markdown(unsafe_allow_html=True)`, and the card icons are SVG `<img>` data URIs — Streamlit 1.51's HTML sanitizer strips inline `<svg>` tags, found when checking the page in a real browser.
+- Layout is `wide` capped at 1100px, with the 5 check cards on one row (2 columns under 900px, 1 under 560px) — the centered layout and auto-fit grid wrapped the cards 4+1.
+- The anomaly table shows `row_number`, `checks_failed` and `details` first — with the original column order, the columns that say what's wrong were off-screen to the right.
+- Slice 2 learner review added: hidden Streamlit toolbar, a "Main issues" line in the banner, 3 + 2 equal-height check cards with the breakdown pinned to the bottom, darker/larger secondary text, status-colored "Rows with errors", and a green message instead of an empty table for clean files — PRD (Look and Feel, Health Score and Verdict, Check Cards, Anomaly Table) and spec (Look and Feel) updated to match. Metric cards became custom HTML because `st.metric` can't color its value. A CSV download button was considered and declined: `st.dataframe`'s built-in download icon already exports the filtered rows, so export stays under Later.

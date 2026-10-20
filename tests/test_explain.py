@@ -1,6 +1,6 @@
 """Verdict wording and score thresholds."""
 
-from cdr_explainer.explain import format_score, verdict_text
+from cdr_explainer.explain import format_score, main_issues, verdict_text
 from cdr_explainer.report import status_for
 
 
@@ -38,3 +38,20 @@ def test_format_score():
     assert format_score(100.0) == "100%"
     assert format_score(94.9) == "94.9%"
     assert format_score(99.0) == "99.0%"
+
+
+def test_main_issues_top_two_by_count():
+    counts = {"missing_or_malformed": 15, "duplicates": 8, "end_before_start": 6,
+              "invalid_duration": 12, "invalid_phone": 10}
+    assert main_issues(counts) == "Main issues: 15 missing or malformed fields · 12 invalid durations"
+
+
+def test_main_issues_ties_keep_card_order_and_singular():
+    counts = {"missing_or_malformed": 0, "duplicates": 1, "end_before_start": 1,
+              "invalid_duration": 1, "invalid_phone": 0}
+    assert main_issues(counts) == "Main issues: 1 duplicate record · 1 end time before start time"
+
+
+def test_main_issues_single_failing_check_and_clean():
+    assert main_issues({"invalid_phone": 3, "duplicates": 0}) == "Main issues: 3 invalid phone numbers"
+    assert main_issues({"invalid_phone": 0, "duplicates": 0}) == ""

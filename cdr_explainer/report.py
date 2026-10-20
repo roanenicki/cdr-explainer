@@ -30,6 +30,7 @@ class Report:
     score_pct: float  # one decimal, rounded down so errors never show as 100%
     status: str  # "green" | "orange" | "red"
     verdict: str
+    main_issues: str  # "Main issues: ..." for the banner, "" for a clean file
     checks: list[CheckSummary]
     anomalies: pd.DataFrame  # row_number, the 8 CDR columns, checks_failed, details
 
@@ -90,6 +91,7 @@ def build_report(df: pd.DataFrame, results: list[CheckResult]) -> Report:
         score_pct=score_pct,
         status=status,
         verdict=explain.verdict_text(status, score_pct, error_rows),
+        main_issues=explain.main_issues({c.check_id: c.count for c in checks}),
         checks=checks,
         anomalies=anomalies.reset_index(drop=True),
     )

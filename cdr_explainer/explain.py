@@ -30,6 +30,17 @@ CHECK_IMPACTS = {
     ),
 }
 
+# (singular, plural) nouns for the banner's "Main issues" line.
+ISSUE_NOUNS = {
+    "missing_or_malformed": ("missing or malformed field", "missing or malformed fields"),
+    "duplicates": ("duplicate record", "duplicate records"),
+    "end_before_start": ("end time before start time", "end times before start time"),
+    "invalid_duration": ("invalid duration", "invalid durations"),
+    "invalid_phone": ("invalid phone number", "invalid phone numbers"),
+}
+
+CLEAN_TABLE_MESSAGE = "No anomalous rows: ready to send downstream."
+
 
 def rows_have(n: int) -> str:
     return "1 row has" if n == 1 else f"{n:,} rows have"
@@ -37,6 +48,17 @@ def rows_have(n: int) -> str:
 
 def issues(n: int) -> str:
     return "1 issue" if n == 1 else f"{n:,} issues"
+
+
+def main_issues(counts: dict[str, int], top: int = 2) -> str:
+    """The top checks by failed-row count, ties in card order; "" when nothing failed."""
+    failing = [(check_id, n) for check_id, n in counts.items() if n > 0]
+    failing.sort(key=lambda item: -item[1])  # stable: ties keep card order
+    parts = []
+    for check_id, n in failing[:top]:
+        singular, plural = ISSUE_NOUNS[check_id]
+        parts.append(f"{n:,} {singular if n == 1 else plural}")
+    return "Main issues: " + " · ".join(parts) if parts else ""
 
 
 def duration_breakdown(breakdown: dict) -> str:
